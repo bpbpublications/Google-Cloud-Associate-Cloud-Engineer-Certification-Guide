@@ -1,0 +1,35 @@
+# Rest API to push the data to Pub/Sub
+
+from flask import Flask, flash, request, redirect, url_for, session
+from flask_cors import CORS, cross_origin
+import os
+from google.cloud import pubsub_v1
+import json
+
+publisher = pubsub_v1.PublisherClient()
+topic_path = publisher.topic_path("e2e-gcp-414110", "my-topic1")
+
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/arijit/Downloads/e2e-gcp-414110-37d68696dbb7.json'
+
+app = Flask(__name__)
+app.secret_key = os.urandom(24)
+
+# cors = CORS(app)
+CORS(app, expose_headers='Authorization')
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    input = request.get_json()
+    print(input)
+    b_string = json.dumps(input, indent=2).encode('utf-8')
+    future = publisher.publish(topic_path, b_string)
+    print(future.result())
+    op = {"status": "Done"}
+    return op
+
+
+if __name__ == "__main__":
+    app.secret_key = os.urandom(24)
+    app.run(debug=True, host="0.0.0.0", use_reloader=False)

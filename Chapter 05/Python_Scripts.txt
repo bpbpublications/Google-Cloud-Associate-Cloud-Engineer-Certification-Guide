@@ -1,0 +1,9 @@
+# Acces GCS Bucket using Python
+
+from google.cloud import storage
+import os
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/arijit/Downloads/gcp-ace-401317-f819054ea85f.json'
+client = storage.Client()
+bucket = client.get_bucket('gcp-ace-data')
+blob = bucket.get_blob('2023-10-31/option-chain-ED-BANKNIFTY-01-Nov-2023.csv')
+print(blob.download_as_string())

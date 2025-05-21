@@ -1,0 +1,7 @@
+# Access GCS Bucket using gcloud commands
+
+gcloud auth login
+gcloud config set project PROJECT_ID
+BUCKET='gs://gcp-ace-data'
+gsutil ls $BUCKET
+gcloud storage cp gs://gcp-ace-data/2023-10-31/option-chain-ED-BANKNIFTY-01-Nov-2023.csv

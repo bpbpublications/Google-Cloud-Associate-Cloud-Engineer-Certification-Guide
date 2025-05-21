@@ -1,0 +1,71 @@
+// React JS Code for Front End
+
+import './App.css';
+import { useState } from 'react';
+ 
+function App() {
+ 
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [dataFlask, setDataFlask] = useState("");
+  const [message, setMessage] = useState("");
+
+  //const handleChange = (event) => {
+  //  setType(event.target.value);
+  //}
+ 
+  const handleSubmission = () => {
+
+    const input = { message };
+
+    console.log(input);
+ 
+      fetch(
+          'https://pubsub-cr-backend-ba5muso3za-el.a.run.app/submit',
+          {
+              method: 'POST',
+              headers: { "Content-Type": "application/json"},
+              body: JSON.stringify(input),
+          }
+      )
+          .then((response) => response.json())
+          .then((dataFlask) => {
+              setDataFlask(dataFlask);
+              setIsSubmitted(true);
+              console.log(dataFlask);
+              
+            })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+  };
+
+  console.log(dataFlask);
+
+  return (
+    <div className="content">
+        <h1>Submit Review</h1>
+      { !isSubmitted ? (
+    <div>
+      <div className="content">
+      <div>
+          <label>Review: </label>
+          <input
+            type="text"
+            required
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          </div>
+      </div>
+      <button onClick={handleSubmission}>Submit</button>
+    </div> ) : (
+    <div className="content">
+    <div>Submitted</div>
+    </div> )}
+    </div>
+  )
+};
+ 
+
+export default App;

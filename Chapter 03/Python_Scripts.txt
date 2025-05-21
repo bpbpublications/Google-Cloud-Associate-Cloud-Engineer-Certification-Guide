@@ -1,0 +1,12 @@
+# Python Code to use BigQuery API
+
+from google.cloud import bigquery
+# Initialising Client
+client = bigquery.Client()
+# Query
+QUERY = ('SELECT col1 FROM `project.dataset.table` WHERE col2 = "ABC" LIMIT 100')
+query_job = client.query(QUERY)  # API request
+rows = query_job.result()  # Waits for query to finish
+# Printing Values
+for row in rows:
+  print(row.column1)

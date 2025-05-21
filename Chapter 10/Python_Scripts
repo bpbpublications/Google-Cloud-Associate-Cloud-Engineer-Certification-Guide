@@ -1,0 +1,20 @@
+# Cloud Functions Python Code
+
+def hello_gcs(event, context):
+
+    from google.cloud import storage
+        
+    bucket_name = event['bucket']
+    blob_name = event['name']
+    destination_bucket_name = "functions-event-ouput"
+    destination_blob_name = "output-file.csv"
+
+    storage_client = storage.Client()
+
+    source_bucket = storage_client.bucket(bucket_name)
+    source_blob = source_bucket.blob(blob_name)
+    destination_bucket = storage_client.bucket(destination_bucket_name)
+
+    blob_copy = source_bucket.copy_blob(source_blob, destination_bucket, destination_blob_name)
+
+    print("Blob {} in bucket {} copied to blob {} in bucket {}.".format(source_blob.name,source_bucket.name,blob_copy.name,destination_bucket.name))
